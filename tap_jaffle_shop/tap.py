@@ -17,28 +17,22 @@ class TapJaffleShop(Tap):
     # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
+            "years",
+            th.NumberType,
+            required=True,
+            default=2,
+            description="The number of years to simulate data for.",
+        ),
+        th.Property(
+            "stream_name_prefix",
             th.StringType,
             required=True,
-            secret=True,  # Flag config as protected.
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            description="Project IDs to replicate",
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            default="https://api.mysample.com",
-            description="The url for the API service",
+            default="jaffle_shop_raw-",
+            description=(
+                "A name prefix to apply to all streams. Note that the dash ('-') "
+                "character will be interpreted by many targets as a delimiter "
+                "between schema and table name."
+            ),
         ),
     ).to_dict()
 
