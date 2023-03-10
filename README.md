@@ -4,6 +4,22 @@ A Singer tap that generates Jaffle Shop sample data.
 
 Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
+## About the Jaffle Shop Generator
+
+The [Jaffle Shop Generator](https://github.com/dbt-labs/jaffle-shop-generator), aka "`jafgen`" is a python-based data generated created by [dbt Labs](www.getdbt.com).
+
+This Singer Tap wraps the `jafgen` tool so that it generate data streams compliant with the [Singer Spec](https://hub.meltano.com/singer/spec/) for data replication.
+
+## Known limitations
+
+At the current time, there is no ability to use this tap in incremental replication modes - and nor is it possible to rerun the data sync and still ensure the target will have maintained referential integrity. Rather, each new sync invocation will generate an entirely new database based on a new (randomly generated) Jaffle Shop company.
+
+Targets that support the `ACTIVATE_VERSION` message type will automatically delete the old records. If your target does not support `ACTIVATE_VERSION` and do want to regenerate the data, please first drop or truncate your tables before reloading. Alternatively, you can use the `stream_name_prefix` config option to change your target table names.
+
+> **Info**
+>
+> Please see [this link](https://github.com/meltanolabs/tap-jaffle-shop/issues/1) for more information, and let us know if you would like to help contribute further improvements in this area.
+
 ## Installation
 
 Install from GitHub:
