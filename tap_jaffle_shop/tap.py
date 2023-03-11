@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from jafgen.simulation import Simulation
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
@@ -36,15 +37,29 @@ class TapJaffleShop(Tap):
         ),
     ).to_dict()
 
+    def create_simulation(self):
+        """Generate a simulation object from the tap's config.
+
+        Returns:
+            A Simulation object.
+        """
+        return Simulation(years=self.config["years"])
+
     def discover_streams(self) -> list[streams.JaffleShopStream]:
         """Return a list of discovered streams.
 
         Returns:
             A list of discovered streams.
         """
+        sim = self.create_simulation()
         return [
-            streams.GroupsStream(self),
-            streams.UsersStream(self),
+            streams.StoresStream(self, sim),
+            streams.CustomersStream(self, sim),
+            streams.MarketsStream(self, sim),
+            # streams.ProductsStream(self, sim),  # TODO: DEBUG 'products' stream
+            streams.OrdersStream(self, sim),
+            # streams.ItemsStream(self, sim),  # TODO: DEBUG 'items' stream
+            # streams.SuppliesStream(self, sim),  # TODO: DEBUG 'supplies' stream
         ]
 
 

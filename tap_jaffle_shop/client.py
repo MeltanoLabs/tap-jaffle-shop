@@ -2,29 +2,32 @@
 
 from __future__ import annotations
 
-from typing import Iterable
+import abc
+import typing as t
 
+from jafgen.simulation import Simulation
+from singer_sdk import Tap
 from singer_sdk.streams import Stream
 
 
-class JaffleShopStream(Stream):
+class JaffleShopStream(Stream, metaclass=abc.ABCMeta):
     """Stream class for JaffleShop streams."""
 
-    def get_records(self, context: dict | None) -> Iterable[dict]:
+    def __init__(
+        self,
+        tap: Tap,
+        simulation: Simulation,
+    ) -> None:
+        self._simulation = simulation
+        super().__init__(tap=tap, schema=None, name=self.name)
+
+    def get_records(self, context: dict | None) -> t.Iterable[dict]:
         """Return a generator of record-type dictionary objects.
 
-        The optional `context` argument is used to identify a specific slice of the
-        stream if partitioning is required for the stream. Most implementations do not
-        require partitioning and should ignore the `context` argument.
-
         Args:
-            context: Stream partition or context dictionary.
-
-        Raises:
-            NotImplementedError: If the implementation is TODO
+            context: Stream partition or context dictionary. (Not used.)
         """
-        # TODO: Write logic to extract data from the upstream source.
-        # records = mysource.getall()
-        # for record in records:
-        #     yield record.to_dict()
-        raise NotImplementedError("The method is not yet implemented (TODO)")
+        list_of_record_tuples: list = self._simulation.__dict__[self.name]
+        for record_tuple in list_of_record_tuples:
+            # TODO: Return a real records dict with actual field names
+            yield {"tuple_data": record_tuple}
