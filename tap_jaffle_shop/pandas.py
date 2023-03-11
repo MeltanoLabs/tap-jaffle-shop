@@ -91,6 +91,9 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
 
         Returns:
             A JSONTypeHelper class representing the json schema type.
+
+        Raises:
+            ValueError: If the dtype cannot be converted to a JSON Schema type.
         """
         dtype = str(dtype)
         if "int" in dtype:
