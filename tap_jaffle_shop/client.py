@@ -22,7 +22,12 @@ class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
         tap: Tap,
         simulation: Simulation,
     ) -> None:
-        """Store the simulation object, then call the base class constructor."""
+        """Store the simulation object, then call the base class constructor.
+
+        Args:
+            tap: The tap object.
+            simulation: A jaffle shop simulation object.
+        """
         self._simulation = simulation
         super().__init__(tap=tap)
 
@@ -31,5 +36,8 @@ class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
 
         Note: the results of this method will be automatically cached by the
         PandasStream base class.
+
+        Returns:
+            A newly created DataFrame object.
         """
         return self._simulation.__dict__[f"df_{self.name}"]

@@ -19,6 +19,11 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
         self,
         tap: Tap,
     ) -> None:
+        """Set up an empty dataframe cache object, then call the base class constructor.
+
+        Args:
+            tap: The tap object.
+        """
         self._dataframe: pd.DataFrame | None = None
         super().__init__(tap=tap, name=None, schema=None)
 
@@ -31,7 +36,14 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
 
     @property
     def dataframe(self) -> pd.DataFrame:
-        """The pandas dataframe."""
+        """The pandas dataframe.
+
+        Note: The property is automatically cached to preserve compute cycles and ensure
+        the dataset itself is stable.
+
+        Returns:
+            A dataframe object.
+        """
         if self._dataframe is None:
             self._dataframe = self.create_dataframe()
 
@@ -42,13 +54,20 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
 
         Args:
             context: Stream partition or context dictionary. (Not used.)
+
+        Yields:
+            A stream of dictionary objects, one per record.
         """
         for record_dict in self.dataframe.to_dict("records"):
             yield record_dict
 
     @property
     def schema(self) -> dict:
-        """A JSON Schema dict that represents the stream's dataframe."""
+        """A JSON Schema dict that represents the stream's dataframe.
+
+        Returns:
+            A dictionary object describing the stream's JSON Schema.
+        """
         return th.PropertiesList(
             *[
                 th.Property(
@@ -66,6 +85,9 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
         """Returns a JSON Schema type definition for the Pandas dtype.json
 
         Uses ref table at: https://note.nkmk.me/en/python-pandas-dtype-astype/
+
+        Args:
+            dtype: The dtype as described from Pandas or Numpy.
 
         Returns:
             A JSONTypeHelper class representing the json schema type.
