@@ -51,12 +51,16 @@ class JaffleShopStream(Stream, metaclass=abc.ABCMeta):
         simulation: Simulation,
     ) -> None:
         self._simulation = simulation
+        self._dataframe: pd.DataFrame | None = None
         super().__init__(tap=tap, schema=None, name=self.name)
 
     @property
     def dataframe(self) -> pd.DataFrame:
         """The pandas dataframe."""
-        return self._simulation.__dict__[f"df_{self.name}"]
+        if self._dataframe is None:
+            self._dataframe = self._simulation.__dict__[f"df_{self.name}"]
+
+        return self._dataframe
 
     def get_records(self, context: dict | None) -> t.Iterable[dict]:
         """Return a generator of record-type dictionary objects.
@@ -70,12 +74,11 @@ class JaffleShopStream(Stream, metaclass=abc.ABCMeta):
     @property
     def schema(self) -> dict:
         """A JSON Schema dict that represents the stream's dataframe."""
-        dataframe = self.dataframe
         return th.PropertiesList(
             *[
                 th.Property(
-                    col, _pandas_dtype_to_jsonschema_type(dataframe.dtypes[col])()
+                    col, _pandas_dtype_to_jsonschema_type(self.dataframe.dtypes[col])()
                 )
-                for col in dataframe.columns
+                for col in self.dataframe.columns
             ]
         ).to_dict()
