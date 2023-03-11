@@ -3,82 +3,33 @@
 from __future__ import annotations
 
 import abc
-import typing as t
-from typing import Type
 
-from jafgen.simulation import Simulation, pd
+from jafgen.simulation import Simulation
 from singer_sdk import Tap
-from singer_sdk import typing as th  # Typing Helper classes
-from singer_sdk.streams import Stream
+
+from tap_jaffle_shop.pandas import PandasStream, pd
 
 
-def _pandas_dtype_to_jsonschema_type(dtype: str) -> Type[th.JSONTypeHelper]:
-    """Returns a JSON Schema type definition for the Pandas dtype.json
+class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
+    """Stream class for JaffleShop streams.
 
-    Uses ref table at: https://note.nkmk.me/en/python-pandas-dtype-astype/
-
-    Returns:
-        A JSONTypeHelper class representing the json schema type.
+    This class builds upon the `PandasStream` class, which provides core capabilities
+    for streams that are built on Pandas data frames.
     """
-    dtype = str(dtype)
-    if "int" in dtype:
-        return th.IntegerType
-
-    if "float" in dtype:
-        return th.NumberType
-
-    if "complex" in dtype:
-        return th.NumberType
-
-    if dtype == "bool":
-        return th.BooleanType
-
-    if dtype == "unicode":
-        return th.StringType
-
-    if dtype == "object":
-        return th.StringType
-
-    raise ValueError(f"Could not detect JSON schema type for Pandas dtype '{dtype}'")
-
-
-class JaffleShopStream(Stream, metaclass=abc.ABCMeta):
-    """Stream class for JaffleShop streams."""
 
     def __init__(
         self,
         tap: Tap,
         simulation: Simulation,
     ) -> None:
+        """Store the simulation object, then call the base class constructor."""
         self._simulation = simulation
-        self._dataframe: pd.DataFrame | None = None
-        super().__init__(tap=tap, schema=None, name=self.name)
+        super().__init__(tap=tap)
 
-    @property
-    def dataframe(self) -> pd.DataFrame:
-        """The pandas dataframe."""
-        if self._dataframe is None:
-            self._dataframe = self._simulation.__dict__[f"df_{self.name}"]
+    def create_dataframe(self) -> pd.DataFrame:
+        """Create a new dataframe object.
 
-        return self._dataframe
-
-    def get_records(self, context: dict | None) -> t.Iterable[dict]:
-        """Return a generator of record-type dictionary objects.
-
-        Args:
-            context: Stream partition or context dictionary. (Not used.)
+        Note: the results of this method will be automatically cached by the
+        PandasStream base class.
         """
-        for record_dict in self.dataframe.to_dict("records"):
-            yield record_dict
-
-    @property
-    def schema(self) -> dict:
-        """A JSON Schema dict that represents the stream's dataframe."""
-        return th.PropertiesList(
-            *[
-                th.Property(
-                    col, _pandas_dtype_to_jsonschema_type(self.dataframe.dtypes[col])()
-                )
-                for col in self.dataframe.columns
-            ]
-        ).to_dict()
+        return self._simulation.__dict__[f"df_{self.name}"]
