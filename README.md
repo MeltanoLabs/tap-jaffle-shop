@@ -33,7 +33,7 @@ Install from a recent GitHub release:
 - Important: check [here](https://github.com/MeltanoLabs/tap-jaffle-shop/releases) for the latest version number.
 
 ```bash
-pipx install git+https://github.com/MeltanoLabs/tap-jaffle-shop.git@0.1.0
+pipx install git+https://github.com/MeltanoLabs/tap-jaffle-shop.git@v0.1.0
 ```
 
 Install from PyPi:
