@@ -94,6 +94,29 @@ pipx install poetry
 poetry install
 ```
 
+### Manual Testing
+
+```console
+# Install everything if working from a fresh clone
+poetry install
+
+# Stream output to a file
+poetry run tap-jaffle-shop > outfile-01.singer.jsonl
+
+# Generate a catalog.json file
+poetry run tap-jaffle-shop --discover > catalog.json
+
+# Stream to JSONL files
+pipx install target-jsonl
+echo '{"destination_path": "./output/"}' > target-jsonl.config.json
+poetry run tap-jaffle-shop | target-jsonl --config=target-jsonl.config.json
+
+# Stream to DuckDB
+pipx install target-duckdb
+echo '{"filepath": "output/out.duckdb", "default_target_schema": "raw"}' > target-duckdb.config.json
+poetry run tap-jaffle-shop | target-duckdb --config=target-duckdb.config.json
+```
+
 ### Create and Run Tests
 
 Create tests within the `tap_jaffle_shop/tests` subfolder and
