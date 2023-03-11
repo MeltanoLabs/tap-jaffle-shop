@@ -6,7 +6,7 @@ Built with the [Meltano Tap SDK](https://sdk.meltano.com) for Singer Taps.
 
 ## About the Jaffle Shop Generator
 
-The [Jaffle Shop Generator](https://github.com/dbt-labs/jaffle-shop-generator), aka "`jafgen`" is a python-based data generated created by [dbt Labs](www.getdbt.com).
+The [Jaffle Shop Generator](https://github.com/dbt-labs/jaffle-shop-generator), aka "`jafgen`" is a python-based data generated created by [dbt Labs](https://www.getdbt.com).
 
 This Singer Tap wraps the `jafgen` tool so that it generate data streams compliant with the [Singer Spec](https://hub.meltano.com/singer/spec/) for data replication.
 
