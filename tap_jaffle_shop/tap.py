@@ -19,7 +19,7 @@ class TapJaffleShop(Tap):
             "years",
             th.NumberType,
             required=True,
-            default=2,
+            default=1,
             description="The number of years to simulate data for.",
         ),
         th.Property(
