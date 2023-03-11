@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from singer_sdk import typing as th  # JSON Schema typing helpers
-
 from tap_jaffle_shop.client import JaffleShopStream
 
 
@@ -14,20 +12,6 @@ class StoresStream(JaffleShopStream):
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
 
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
-
-
-class MarketsStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
-
-    name = "markets"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
-
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
-
 
 class CustomersStream(JaffleShopStream):
     """List of Jaffle Shop stores."""
@@ -35,9 +19,6 @@ class CustomersStream(JaffleShopStream):
     name = "customers"
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
-
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
 
 
 class OrdersStream(JaffleShopStream):
@@ -47,9 +28,6 @@ class OrdersStream(JaffleShopStream):
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
 
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
-
 
 class ProductsStream(JaffleShopStream):
     """List of Jaffle Shop stores."""
@@ -57,9 +35,6 @@ class ProductsStream(JaffleShopStream):
     name = "products"
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
-
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
 
 
 class ItemsStream(JaffleShopStream):
@@ -69,9 +44,6 @@ class ItemsStream(JaffleShopStream):
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
 
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()
-
 
 class SuppliesStream(JaffleShopStream):
     """List of Jaffle Shop stores."""
@@ -79,6 +51,3 @@ class SuppliesStream(JaffleShopStream):
     name = "supplies"
     # TODO: Identify primary keys, if any
     # primary_keys = ["id"]
-
-    # TODO: Define or detect the real schema
-    schema = th.PropertiesList(th.Property("tuple_data", th.StringType)).to_dict()

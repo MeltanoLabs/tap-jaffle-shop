@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from jafgen.simulation import Simulation
+from jafgen.simulation import Inventory, Simulation, Stock, pd
 from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
-# TODO: Import your custom stream types here:
 from tap_jaffle_shop import streams
 
 
@@ -15,7 +14,6 @@ class TapJaffleShop(Tap):
 
     name = "tap-jaffle-shop"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
             "years",
@@ -41,9 +39,31 @@ class TapJaffleShop(Tap):
         """Generate a simulation object from the tap's config.
 
         Returns:
-            A Simulation object.
+            A Simulation object with dataframes appended.
         """
-        return Simulation(years=self.config["years"])
+        sim = Simulation(years=self.config["years"])
+
+        sim.run_simulation()
+
+        # Note: The following logic is copied from `Simulation.save_results()` and may
+        # not be stable across versions.
+        #
+        # Source:
+        # https://github.com/dbt-labs/jaffle-shop-generator/blob/0806cb627139238225503f019af042e4aa39f92e/jafgen/simulation.py#L106
+        sim.df_customers = pd.DataFrame.from_dict(
+            customer.to_dict() for customer in sim.customers.values()
+        )
+        sim.df_orders = pd.DataFrame.from_dict(order.to_dict() for order in sim.orders)
+        sim.df_items = pd.DataFrame.from_dict(
+            item.to_dict() for order in sim.orders for item in order.items
+        )
+        sim.df_stores = pd.DataFrame.from_dict(
+            market.store.to_dict() for market in sim.markets
+        )
+        sim.df_products = pd.DataFrame.from_dict(Inventory.to_dict())
+        sim.df_supplies = pd.DataFrame.from_dict(Stock.to_dict())
+
+        return sim
 
     def discover_streams(self) -> list[streams.JaffleShopStream]:
         """Return a list of discovered streams.
@@ -55,11 +75,10 @@ class TapJaffleShop(Tap):
         return [
             streams.StoresStream(self, sim),
             streams.CustomersStream(self, sim),
-            streams.MarketsStream(self, sim),
-            # streams.ProductsStream(self, sim),  # TODO: DEBUG 'products' stream
+            streams.ProductsStream(self, sim),
             streams.OrdersStream(self, sim),
-            # streams.ItemsStream(self, sim),  # TODO: DEBUG 'items' stream
-            # streams.SuppliesStream(self, sim),  # TODO: DEBUG 'supplies' stream
+            streams.ItemsStream(self, sim),
+            streams.SuppliesStream(self, sim),
         ]
 
 
