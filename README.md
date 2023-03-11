@@ -22,10 +22,18 @@ Targets that support the `ACTIVATE_VERSION` message type will automatically dele
 
 ## Installation
 
-Install from GitHub:
+Install from GitHub `main` branch:
 
 ```bash
 pipx install git+https://github.com/MeltanoLabs/tap-jaffle-shop.git@main
+```
+
+Install from a recent GitHub release:
+
+- Important: check [here](https://github.com/MeltanoLabs/tap-jaffle-shop/releases) for the latest version number.
+
+```bash
+pipx install git+https://github.com/MeltanoLabs/tap-jaffle-shop.git@0.1.0
 ```
 
 Install from PyPi:
