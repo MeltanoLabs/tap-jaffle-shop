@@ -9,45 +9,39 @@ class StoresStream(JaffleShopStream):
     """List of Jaffle Shop stores."""
 
     name = "stores"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["id"]
 
 
 class CustomersStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
+    """List of Jaffle Shop customers."""
 
     name = "customers"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["id"]
 
 
 class OrdersStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
+    """List of Jaffle Shop orders."""
 
     name = "orders"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["id"]
 
 
 class ProductsStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
+    """List of Jaffle Shop products."""
 
     name = "products"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["sku"]
 
 
 class ItemsStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
+    """List of Jaffle Shop items."""
 
     name = "items"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["id"]
 
 
 class SuppliesStream(JaffleShopStream):
-    """List of Jaffle Shop stores."""
+    """List of Jaffle Shop supplies."""
 
     name = "supplies"
-    # TODO: Identify primary keys, if any
-    # primary_keys = ["id"]
+    primary_keys = ["id"]
