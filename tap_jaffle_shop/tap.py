@@ -7,6 +7,7 @@ from singer_sdk import Tap
 from singer_sdk import typing as th  # JSON schema typing helpers
 
 from tap_jaffle_shop import streams
+from tap_jaffle_shop.client import JaffleShopStream
 
 
 class TapJaffleShop(Tap):
@@ -26,7 +27,7 @@ class TapJaffleShop(Tap):
             "stream_name_prefix",
             th.StringType,
             required=True,
-            default="jaffle_shop_raw-",
+            default="tap_jaffle_shop-raw_",
             description=(
                 "A name prefix to apply to all streams. Note that the dash ('-') "
                 "character will be interpreted by many targets as a delimiter "
@@ -72,13 +73,18 @@ class TapJaffleShop(Tap):
             A list of discovered streams.
         """
         sim = self.create_simulation()
+        name_prefix = self.config.get("stream_name_prefix", "")
+        stream_types: list[type[JaffleShopStream]] = [
+            streams.StoresStream,
+            streams.CustomersStream,
+            streams.ProductsStream,
+            streams.OrdersStream,
+            streams.ItemsStream,
+            streams.SuppliesStream,
+        ]
         return [
-            streams.StoresStream(self, sim),
-            streams.CustomersStream(self, sim),
-            streams.ProductsStream(self, sim),
-            streams.OrdersStream(self, sim),
-            streams.ItemsStream(self, sim),
-            streams.SuppliesStream(self, sim),
+            stream_type(self, sim, name=name_prefix + stream_type.base_name)
+            for stream_type in stream_types
         ]
 
 

@@ -8,40 +8,40 @@ from tap_jaffle_shop.client import JaffleShopStream
 class StoresStream(JaffleShopStream):
     """List of Jaffle Shop stores."""
 
-    name = "stores"
+    base_name = "stores"
     primary_keys = ["id"]
 
 
 class CustomersStream(JaffleShopStream):
     """List of Jaffle Shop customers."""
 
-    name = "customers"
+    base_name = "customers"
     primary_keys = ["id"]
 
 
 class OrdersStream(JaffleShopStream):
     """List of Jaffle Shop orders."""
 
-    name = "orders"
+    base_name = "orders"
     primary_keys = ["id"]
 
 
 class ProductsStream(JaffleShopStream):
     """List of Jaffle Shop products."""
 
-    name = "products"
+    base_name = "products"
     primary_keys = ["sku"]
 
 
 class ItemsStream(JaffleShopStream):
     """List of Jaffle Shop items."""
 
-    name = "items"
+    base_name = "items"
     primary_keys = ["id"]
 
 
 class SuppliesStream(JaffleShopStream):
     """List of Jaffle Shop supplies."""
 
-    name = "supplies"
+    base_name = "supplies"
     primary_keys = ["id"]

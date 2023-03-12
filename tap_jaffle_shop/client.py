@@ -21,15 +21,18 @@ class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
         self,
         tap: Tap,
         simulation: Simulation,
+        name: str,
     ) -> None:
         """Store the simulation object, then call the base class constructor.
 
         Args:
             tap: The tap object.
             simulation: A jaffle shop simulation object.
+            name: The stream name to use during discovery and when sending data to the
+                target.
         """
         self._simulation = simulation
-        super().__init__(tap=tap)
+        super().__init__(tap=tap, name=name)
 
     def create_dataframe(self) -> pd.DataFrame:
         """Create a new dataframe object.
@@ -40,4 +43,9 @@ class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
         Returns:
             A newly created DataFrame object.
         """
-        return self._simulation.__dict__[f"df_{self.name}"]
+        return self._simulation.__dict__[f"df_{self.base_name}"]
+
+    @property
+    @abc.abstractmethod
+    def base_name(self) -> str:
+        """Get base name of the stream, before applying a prefix."""

@@ -18,14 +18,17 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
     def __init__(
         self,
         tap: Tap,
+        name: str | None = None,
     ) -> None:
         """Set up an empty dataframe cache object, then call the base class constructor.
 
         Args:
             tap: The tap object.
+            name: The name of the stream, to use during discovery and when sending
+                data to the target. (Optional.)
         """
         self._dataframe: pd.DataFrame | None = None
-        super().__init__(tap=tap, name=None, schema=None)
+        super().__init__(tap=tap, name=name, schema=None)
 
     @abc.abstractmethod
     def create_dataframe(self) -> pd.DataFrame:
