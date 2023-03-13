@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "meltanolabs-tap-jaffle-shop"
-version = "0.2.0"
+version = "0.2.1"
 description = "`tap-jaffle-shop` is a Singer tap for JaffleShop, built with the Meltano Singer SDK."
 readme = "README.md"
 authors = ["Meltano"]
