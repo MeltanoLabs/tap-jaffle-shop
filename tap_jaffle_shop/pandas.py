@@ -71,16 +71,19 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
         Returns:
             A dictionary object describing the stream's JSON Schema.
         """
+
+        def _get_type(col: str) -> th.JSONTypeHelper:
+            if str(col).endswith("_at"):
+                # Pandas base class cannot detect datetime values
+                # https://github.com/MeltanoLabs/tap-jaffle-shop/issues/2
+                return th.DateTimeType()
+
+            return PandasStream.pandas_dtype_to_jsonschema_type(
+                self.dataframe.dtypes[col]
+            )()
+
         return th.PropertiesList(
-            *[
-                th.Property(
-                    col,
-                    PandasStream.pandas_dtype_to_jsonschema_type(
-                        self.dataframe.dtypes[col]
-                    )(),
-                )
-                for col in self.dataframe.columns
-            ]
+            *[th.Property(col, _get_type(col)) for col in self.dataframe.columns]
         ).to_dict()
 
     @classmethod
