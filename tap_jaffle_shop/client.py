@@ -17,6 +17,8 @@ class JaffleShopStream(PandasStream, metaclass=abc.ABCMeta):
     for streams that are built on Pandas data frames.
     """
 
+    batch_size = 100000
+
     def __init__(
         self,
         tap: Tap,

@@ -1,13 +1,13 @@
 version: 1
 send_anonymous_usage_stats: true
-project_id: "tap-jaffle-shop"
+project_id: tap-jaffle-shop
 default_environment: test
 environments:
 - name: test
 plugins:
   extractors:
-  - name: "tap-jaffle-shop"
-    namespace: "tap_jaffle_shop"
+  - name: tap-jaffle-shop
+    namespace: tap_jaffle_shop
     pip_url: -e .
     capabilities:
     - state
@@ -15,16 +15,30 @@ plugins:
     - discover
     - about
     - stream-maps
-    config:
-      start_date: '2010-01-01T00:00:00Z'
     settings:
-    # TODO: To configure using Meltano, declare settings and their types here:
-    - name: username
-    - name: password
-      kind: password
-    - name: start_date
-      value: '2010-01-01T00:00:00Z'
+    - name: years
+      kind: integer
+    - name: stream_name_prefix
+      kind: string
+    - name: stream_maps
+      kind: object
+    - name: stream_map_config
+      kind: object
+    - name: batch_config
+      kind: object
+    config:
+      batch_config:
+        encoding:
+          format: jsonl
+          compression: gzip
+        storage:
+          root: ./output/temp/
   loaders:
   - name: target-jsonl
     variant: andyh1203
     pip_url: target-jsonl
+  - name: target-duckdb
+    variant: jwills
+    pip_url: target-duckdb~=0.4
+    config:
+      filepath: outdb.duckdb
