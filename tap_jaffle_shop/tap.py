@@ -62,7 +62,7 @@ class TapJaffleShop(Tap):
                     ),
                 ),
             ),
-        )
+        ),
     ).to_dict()
 
     def create_simulation(self):
