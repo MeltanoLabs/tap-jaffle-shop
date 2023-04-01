@@ -26,13 +26,14 @@ plugins:
       kind: object
     - name: batch_config
       kind: object
-    config:
-      batch_config:
-        encoding:
-          format: jsonl
-          compression: gzip
-        storage:
-          root: ./output/temp/
+    # Uncomment to enable batch messaging:
+    # config:
+    #   batch_config:
+    #     encoding:
+    #       format: jsonl
+    #       compression: gzip
+    #     storage:
+    #       root: ./output/temp/
   loaders:
   - name: target-jsonl
     variant: andyh1203

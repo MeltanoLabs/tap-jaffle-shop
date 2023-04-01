@@ -28,6 +28,7 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
                 data to the target. (Optional.)
         """
         self._dataframe: pd.DataFrame | None = None
+        self._schema: dict | None = None
         super().__init__(tap=tap, name=name, schema=None)
 
     @abc.abstractmethod
@@ -71,6 +72,8 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
         Returns:
             A dictionary object describing the stream's JSON Schema.
         """
+        if self._schema is not None:
+            return self._schema
 
         def _get_type(col: str) -> th.JSONTypeHelper:
             if str(col).endswith("_at"):
@@ -82,9 +85,10 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
                 self.dataframe.dtypes[col]
             )()
 
-        return th.PropertiesList(
+        self._schema = th.PropertiesList(
             *[th.Property(col, _get_type(col)) for col in self.dataframe.columns]
         ).to_dict()
+        return self._schema
 
     @classmethod
     def pandas_dtype_to_jsonschema_type(cls, dtype: str) -> Type[th.JSONTypeHelper]:
