@@ -28,7 +28,7 @@ class PandasStream(Stream, metaclass=abc.ABCMeta):
                 data to the target. (Optional.)
         """
         self._dataframe: pd.DataFrame | None = None
-        self._schema: dict | None = None
+        self._schema: dict | None = None  # type: ignore # TODO: Fix in SDK upstream
         super().__init__(tap=tap, name=name, schema=None)
 
     @abc.abstractmethod
