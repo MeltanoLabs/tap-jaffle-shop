@@ -34,6 +34,39 @@ class TapJaffleShop(Tap):
                 "between schema and table name."
             ),
         ),
+        th.Property(
+            "batch_config",
+            description=(
+                "If provided, specifies the storage and encoding parameters for "
+                "batch messaging to the target."
+            ),
+            wrapped=th.ObjectType(
+                th.Property(
+                    "encoding",
+                    description=(
+                        "Specifies the format and compression of the batch files."
+                    ),
+                    wrapped=th.ObjectType(
+                        th.Property("format", th.StringType, allowed_values=["jsonl"]),
+                        th.Property(
+                            "compression",
+                            th.StringType,
+                            allowed_values=["gzip", "none"],
+                        ),
+                    ),
+                ),
+                th.Property(
+                    "storage",
+                    description=(
+                        "Defines the storage layer to use when writing batch files"
+                    ),
+                    wrapped=th.ObjectType(
+                        th.Property("root", th.StringType),
+                        th.Property("prefix", th.StringType),
+                    ),
+                ),
+            ),
+        ),
     ).to_dict()
 
     def create_simulation(self):
