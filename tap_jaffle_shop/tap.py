@@ -43,7 +43,9 @@ class TapJaffleShop(Tap):
             wrapped=th.ObjectType(
                 th.Property(
                     "encoding",
-                    description="Specifies the format and compression of the batch files.",
+                    description=(
+                        "Specifies the format and compression of the batch files."
+                    ),
                     wrapped=th.ObjectType(
                         th.Property("format", th.StringType, allowed_values=["jsonl"]),
                         th.Property(
@@ -55,7 +57,9 @@ class TapJaffleShop(Tap):
                 ),
                 th.Property(
                     "storage",
-                    description="Defines the storage layer to use when writing batch files",
+                    description=(
+                        "Defines the storage layer to use when writing batch files"
+                    ),
                     wrapped=th.ObjectType(
                         th.Property("root", th.StringType),
                         th.Property("prefix", th.StringType),
