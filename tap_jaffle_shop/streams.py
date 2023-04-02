@@ -44,4 +44,4 @@ class SuppliesStream(JaffleShopStream):
     """List of Jaffle Shop supplies."""
 
     base_name = "supplies"
-    primary_keys = ["id"]
+    primary_keys = ["id", "sku"]
